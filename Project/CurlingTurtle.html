@@ -28,9 +28,9 @@
   <div id="bottomPanel">
     <div id="stats">
       <h3>Game Stats</h3>
-      <div id="statusText">Tries remaining: 3</div>
-      <div id="scoreText">Score: 0</div>
-      <div id="powerText">Power: 0%</div>
+        <div id="statusText">Tries remaining: 3</div>
+        <div id="scoreText">Score: 0</div>
+        <div id="powerText">Power: 0%</div>
       <div style="margin:10px 0;">
         <div style="height:12px;width:100%;background:rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;">
           <div id="powerBar" style="height:100%;width:0%;background:#76ff7f;transition:width 0.1s;"></div>
@@ -302,12 +302,12 @@
   document.getElementById('home').addEventListener('click', ()=>{
     window.location.href = 'homepage.html';
   });
-  submitScoreButton.addEventListener('click', ()=>{
+  document.getElementById('submitScore').addEventListener('click', ()=>{
     if(!gameOver) return;
     const name = playerNameInput.value.trim() || 'Player';
     addLeaderboardEntry(name, score);
     playerNameInput.value = '';
   });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
