@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Cheetah Jungle Run</title>
+	<style>
+		html,body{height:100%;margin:0;background:linear-gradient(#1e3d1f,#5b8a43);display:flex;align-items:center;justify-content:center;font-family:sans-serif}
+		#game{background:linear-gradient(#2f5f2a,#6ca55a);box-shadow:0 6px 20px rgba(0,0,0,.4);border:6px solid rgba(0,0,0,.1)}
+		canvas{display:block}
+		.overlay{position:absolute;top:10px;left:10px;color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+
+        .return-button {
+            display: block;
+            text-align: center;
+            margin: 24px auto 0 auto;
+            padding: 12px 24px;
+            background: #3b6f29;
+            color: white;
+            text-decoration: none;
+            border-radius: 14px;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .return-button:hover {
+            background: #2f5b21;
+            transform: translateY(-2px);
+        }
+
+        .start-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px 32px;
+            background: #d49f31;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.15s ease;
+            z-index: 10;
+        }
+
+        .start-button:hover {
+            background: #b87b1f;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+	</style>
+</head>
+<body>
+	<div style="position:relative">
+		<canvas id="game" width="480" height="640"></canvas>
+		<div class="overlay" id="score">Score: 0</div>
+		<button id="startBtn" class="start-button">Start Game</button>
+        <a href="Homepage.html" class="return-button">Return to Home</a>
+	</div>
+
+	<script>
+	const canvas = document.getElementById('game');
+	const ctx = canvas.getContext('2d');
+	const scoreEl = document.getElementById('score');
+
+	const W = canvas.width, H = canvas.height;
+
+	
+	const player = {
+		x: 90,
+		y: H/2,
+		radius: 18,
+		vel: 0,
+		rotation: 0
+	};
+
+	const gravity = 0.0099;
+	const jump = 1;
+	const gap = 270;
+	const pipeWidth = 40;
+	const pipeSpeed = 2;
+	const minPipeSpacing = 210;
+	let pipes = [];
+	const humans = [
+		{x:-20,yOffset:0,scale:1},
+		{x:-40,yOffset:-20,scale:0.8},
+		{x:10,yOffset:-10,scale:0.9}
+	];
+	let frame = 0;
+	let score = 0;
+	let best = 0;
+	let running = false;
+	let gameStarted = false;
+
+	function reset(){
+		pipes = [];
+		frame = 0;
+		score = 0;
+		player.y = H/2; player.vel = 0; player.rotation = 0;
+		running = true;
+		gameStarted = true;
+		document.getElementById('startBtn').style.display = 'none';
+	}
+
+	function spawnPipe(){
+		const topHeight = 80 + Math.random()*(H - 40 - gap - 80);
+		pipes.push({x: W, top: topHeight, passed:false});
+	}
+
+	function drawHuman(x,y,scale){
+		ctx.save();
+		ctx.translate(x,y);
+		ctx.scale(scale,scale);
+		ctx.fillStyle='#3a2210';
+		ctx.beginPath();
+		ctx.ellipse(0,0,6,14,0,0,Math.PI*2);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.arc(0,-20,8,0,Math.PI*2);
+		ctx.fill();
+		ctx.strokeStyle='#3a2210';
+		ctx.lineWidth=3;
+		ctx.beginPath();
+		ctx.moveTo(-8,-10);
+		ctx.lineTo(-18,2);
+		ctx.moveTo(8,-10);
+		ctx.lineTo(18,2);
+		ctx.moveTo(-4,14);
+		ctx.lineTo(-10,30);
+		ctx.moveTo(4,14);
+		ctx.lineTo(10,30);
+		ctx.stroke();
+		ctx.fillStyle='#fff';
+		ctx.beginPath();
+		ctx.arc(-3,-22,1.5,0,Math.PI*2);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.arc(3,-22,1.5,0,Math.PI*2);
+		ctx.fill();
+		ctx.restore();
+	}
+
+	function drawTurtle(x,y,r,rot){
+		ctx.save();
+		ctx.translate(x,y);
+		ctx.rotate(rot);
+		// body
+		ctx.fillStyle = '#e3b03d';
+		ctx.beginPath();
+		ctx.ellipse(0,0,r*1.4,r,0,0,Math.PI*2);
+		ctx.fill();
+		// spots
+		ctx.fillStyle = '#4a2e0d';
+		const spots = [
+			{x:-0.7,y:-0.2},
+			{x:-0.2,y:-0.4},
+			{x:0.4,y:-0.1},
+			{x:0.1,y:0.2},
+			{x:0.7,y:0.25},
+			{x:-0.4,y:0.3},
+			{x:0.6,y:-0.35}
+		];
+		for(const s of spots){
+			ctx.beginPath();
+			ctx.ellipse(s.x*r, s.y*r, r*0.16, r*0.09, 0, 0, Math.PI*2);
+			ctx.fill();
+		}
+		// head
+		ctx.beginPath();
+		ctx.ellipse(r*1.15,-r*0.15,r*0.75,r*0.55,0,0,Math.PI*2);
+		ctx.fill();
+		// ears
+		ctx.beginPath();
+		ctx.moveTo(r*0.7,-r*0.85);
+		ctx.lineTo(r*0.95,-r*1.4);
+		ctx.lineTo(r*1.2,-r*0.85);
+		ctx.closePath(); ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(r*1.0,-r*0.85);
+		ctx.lineTo(r*1.25,-r*1.4);
+		ctx.lineTo(r*1.45,-r*0.85);
+		ctx.closePath(); ctx.fill();
+		// eyes
+		ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(r*1.28,-r*0.08,r*0.16,0,Math.PI*2); ctx.fill();
+		ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(r*1.3,-r*0.08,r*0.08,0,Math.PI*2); ctx.fill();
+		// muzzle
+		ctx.fillStyle='#4a2e0d'; ctx.beginPath(); ctx.ellipse(r*1.23,r*0.2,r*0.14,r*0.08,0,0,Math.PI*2); ctx.fill();
+		// tail
+		ctx.strokeStyle = '#e3b03d'; ctx.lineWidth = r*0.22;
+		ctx.beginPath();
+		ctx.moveTo(-r*1.3,r*0.2);
+		ctx.quadraticCurveTo(-r*2.5, r*0.8, -r*1.3, r*1.4);
+		ctx.stroke();
+		ctx.fillStyle='#4a2e0d';
+		ctx.beginPath();
+		ctx.arc(-r*1.3,r*1.4,r*0.18,0,Math.PI*2);
+		ctx.fill();
+		ctx.restore();
+	}
+
+	function update(){
+		if(!running) return;
+		frame++;
+		// physics
+		player.vel += gravity;
+		player.y += player.vel;
+		player.rotation = Math.max(-0.6, Math.min(0.8, player.vel/10));
+
+		if(frame%90===0) spawnPipe();
+
+		for(let i=pipes.length-1;i>=0;i--){
+			const p = pipes[i];
+			p.x -= pipeSpeed;
+			// collision
+			const inX = player.x + player.radius > p.x && player.x - player.radius < p.x + pipeWidth;
+			if(inX){
+				if(player.y - player.radius < p.top || player.y + player.radius > p.top + gap){
+					gameOver();
+				}
+			}
+			if(!p.passed && p.x + pipeWidth < player.x){ p.passed = true; score++; scoreEl.textContent = 'Score: '+score; }
+			if(p.x + pipeWidth < -10) pipes.splice(i,1);
+		}
+
+		// humans follow cheetah
+		const baseX = player.x - 80;
+		humans.forEach((h,i)=>{
+			const targetX = baseX + i * 18;
+			h.x += (targetX - h.x) * 0.03;
+		});
+
+		// floor and ceiling
+		if(player.y + player.radius > H-10 || player.y - player.radius < 10) gameOver();
+	}
+
+	function gameOver(){
+		running = false;
+		gameStarted = false;
+		best = Math.max(best, score);
+		setTimeout(()=>{
+			const again = confirm('Game over. Score: '+score+'\nBest: '+best+'\nPlay again?');
+			if(again) {
+				document.getElementById('startBtn').style.display = 'block';
+				pipes = [];
+				frame = 0;
+				score = 0;
+				player.y = H/2; player.vel = 0; player.rotation = 0;
+				scoreEl.textContent = 'Score: 0';
+				spawnPipe();
+			}
+		},100);
+	}
+
+    
+	function draw(){
+		// background
+		ctx.clearRect(0,0,W,H);
+		const gradient = ctx.createLinearGradient(0,0,0,H);
+		gradient.addColorStop(0,'#4a813c');
+		gradient.addColorStop(1,'#1f3c1d');
+		ctx.fillStyle = gradient;
+		ctx.fillRect(0,0,W,H);
+
+		// jungle vines
+		ctx.strokeStyle='#2d5a24';
+		ctx.lineWidth=6;
+		for(let i=60;i<W-40;i+=80){
+			ctx.beginPath();
+			ctx.moveTo(i,0);
+			ctx.quadraticCurveTo(i+10,90,i+20,170);
+			ctx.stroke();
+			ctx.fillStyle='#3f6f2b';
+			ctx.beginPath();
+			ctx.arc(i+18,170,12,0,Math.PI*2);
+			ctx.fill();
+		}
+
+		// tree silhouettes
+		ctx.fillStyle='rgba(15,45,12,0.7)';
+		ctx.fillRect(20,120,30,260);
+		ctx.fillRect(W-60,150,40,300);
+		ctx.fillRect(120,100,20,250);
+
+		// ground
+		ctx.fillStyle='#4d2f14'; ctx.fillRect(0,H-40,W,40);
+		ctx.fillStyle='#28511f';
+		for(let x=0;x<W;x+=20){
+			ctx.fillRect(x,H-36,10,8);
+		}
+
+		// humans chasing on the left
+		drawHuman(40,H-70,1);
+		drawHuman(20,H-90,0.8);
+		drawHuman(70,H-80,0.9);
+
+		// logs
+		ctx.fillStyle='#7c4f24';
+		for(const p of pipes){
+			// top log
+			ctx.fillRect(p.x,0,pipeWidth,p.top);
+			// bottom log
+			ctx.fillRect(p.x,p.top+gap,pipeWidth,H - (p.top+gap) - 40);
+			// rim
+			ctx.fillStyle='#5a3a1a'; ctx.fillRect(p.x,p.top-8,pipeWidth,8);
+			ctx.fillStyle='#7c4f24';
+		}
+
+		// cheetah
+		drawTurtle(player.x, player.y, player.radius, player.rotation);
+
+		// instructions
+		if(!running){ ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(40,140,W-80,H-280); ctx.fillStyle='#fff'; ctx.font='18px sans-serif'; ctx.fillText('Press up arrow to leap. Avoid jungle logs.',60,200); }
+	}
+
+	function loop(){ update(); draw(); requestAnimationFrame(loop); }
+
+	// input
+	function flap(){ if(!running) return; player.vel = -jump; }
+	window.addEventListener('keydown', e=>{ 
+		if(e.code==='Space') { if(!gameStarted) return; flap(); e.preventDefault(); }
+		if(e.code==='ArrowDown') { if(!gameStarted) return; player.vel = jump; e.preventDefault(); }
+		if(e.code==='ArrowUp') { if(!gameStarted) return; player.vel = -jump; e.preventDefault(); }
+	});
+	canvas.addEventListener('mousedown', (e)=>{
+		if(!gameStarted) return;
+		if(e.button === 0) {
+			flap();
+		} else if(e.button === 2) {
+			player.vel = jump;
+		}
+	});
+	canvas.addEventListener('contextmenu', e=>{ e.preventDefault(); });
+	canvas.addEventListener('touchstart', (e)=>{ e.preventDefault(); if(!gameStarted && !running) return; flap(); },{passive:false});
+	document.getElementById('startBtn').addEventListener('click', reset);
+
+	// start
+	scoreEl.textContent = 'Score: 0';
+	spawnPipe();
+	loop();
+	</script>
+</body>
+</html>
