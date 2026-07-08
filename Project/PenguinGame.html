@@ -42,47 +42,44 @@ body {
   margin-left: 10px;
 }
 #returnBtn {
-  position: absolute;
-  top: 12px;
-  right: 14px;
+  display: block;
+  margin-top: 8px;
   padding: 8px 16px;
   font-size: 16px;
-  border: 2px solid #8ec7ff;
+  border: 2px solid #ffd700;
   border-radius: 6px;
-  background: #3d73c3;
+  background: #ff6b35;
   color: #ffffff;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(60, 160, 255, 0.3);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
   transition: all 0.3s ease;
 }
 #returnBtn:hover {
-  background: #5c8ee0;
+  background: #ff8555;
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.9);
 }
 </style>
 </head>
 <body>
 <canvas id="gameCanvas" width="400" height="600"></canvas>
-
-<div id="hud">
+<div id="hud"> 
   <button id="startBtn">Start</button>
-  <button id="pauseBtn">Pause</button>
+  <button id="returnBtn">Return</button>
   <span id="status"></span>
-  <a href="homepage.html"><button id="returnBtn">Return</button></a>
 </div>
 <script>
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const hud = document.getElementById("hud");
 const startBtn = document.getElementById("startBtn");
-const pauseBtn = document.getElementById("pauseBtn");
+const returnBtn = document.getElementById("returnBtn") 
 const status = document.getElementById("status");
 const width = canvas.width;
 const height = canvas.height;
 const keys = {};
 let score = 0;
 let gameOver = false;
-let paused = false;
 let started = false;
 let scrollOffset = 0;
 const speedFactor = 0.1;
@@ -101,7 +98,9 @@ const iceTypes = [
 ];
 const platforms = [];
 function createPlatform(x, y, typeIndex) {
-  return { x, y, w: 80, h: 14, type: iceTypes[typeIndex] };
+  const p = { x, y, w: 80, h: 14, type: iceTypes[typeIndex] };
+  if (iceTypes[typeIndex].pattern === "cracked") p.hitsLeft = 1; // cracked breaks after one jump
+  return p;
 }
 function initPlatforms() {
   platforms.length = 0;
@@ -117,13 +116,9 @@ window.addEventListener("keyup", e => keys[e.key] = false);
 startBtn.addEventListener("click", () => {
   if (!started || gameOver) reset();
   started = true;
-  paused = false;
-  pauseBtn.textContent = "Pause";
 });
-pauseBtn.addEventListener("click", () => {
-  if (!started || gameOver) return;
-  paused = !paused;
-  pauseBtn.textContent = paused ? "Resume" : "Pause";
+returnBtn.addEventListener("click", () => {
+  window.location.href = "homepage.html";
 });
 function drawPenguin() {
   ctx.save();
@@ -214,15 +209,17 @@ function drawPlatform(platform) {
   }
 }
 function update() {
-  if (gameOver || !started || paused) return;
+  if (gameOver || !started) return;
   const prevY = penguin.y;
-  if (keys.ArrowLeft || keys.a) penguin.vx = -3.5 * speedFactor;
-  else if (keys.ArrowRight || keys.d) penguin.vx = 3.5 * speedFactor;
+  if (keys.ArrowLeft || keys.a) penguin.vx = -4.2 * speedFactor;
+  else if (keys.ArrowRight || keys.d) penguin.vx = 4.2 * speedFactor;
   else penguin.vx *= 0.92;
   penguin.x += penguin.vx;
   if (penguin.x < -penguin.radius) penguin.x = width + penguin.radius;
   if (penguin.x > width + penguin.radius) penguin.x = -penguin.radius;
-  penguin.vy += 0.20 * speedFactor;
+  // reduced gravity so penguin can jump higher
+  // lower gravity and stronger bounce for higher jumps; slightly faster horizontal movement
+  penguin.vy += 0.06 * speedFactor;
   penguin.y += penguin.vy;
   if (penguin.y > height) {
     gameOver = true;
@@ -241,11 +238,21 @@ function update() {
           gameOver = true;
         } else {
           penguin.y = platform.y - penguin.radius;
-          penguin.vy = -6 * speedFactor;
+          // stronger bounce so jumps feel better with reduced gravity
+          penguin.vy = -18 * speedFactor;
           score += 10;
+          // if cracked, consume hit and mark for removal
+          if (platform.type.pattern === "cracked") {
+            platform.hitsLeft = (platform.hitsLeft || 1) - 1;
+            if (platform.hitsLeft <= 0) platform.toRemove = true;
+          }
         }
       }
     });
+    // remove any cracked platforms that broke
+    for (let i = platforms.length - 1; i >= 0; i--) {
+      if (platforms[i].toRemove) platforms.splice(i, 1);
+    }
   }
   if (penguin.y < height / 3) {
     const dy = Math.min(8, (height / 3 - penguin.y) * 0.08);
@@ -277,7 +284,7 @@ function draw() {
   ctx.fillText("Penguin Ice Jumper", 14, 32);
   platforms.forEach(drawPlatform);
   drawPenguin();
-  status.textContent = "Score: " + score + (gameOver ? "   Press R to restart" : paused ? "   Paused" : !started ? "   Press Start to begin" : "");
+  status.textContent = "Score: " + score + (gameOver ? "   Press R to restart" : !started ? "   Press Start to begin" : "");
   if (gameOver) {
     ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
     ctx.fillRect(0, height / 2 - 56, width, 112);
@@ -312,7 +319,6 @@ function reset() {
   scrollOffset = 0;
   initPlatforms();
   platforms.unshift(createPlatform(penguin.x - 40, height - 50, 0));
-  pauseBtn.textContent = "Pause";
 }
 loop();
 </script>
