@@ -53,11 +53,11 @@
       <div id="status"></div>
     </div>
   </div>
-  <canvas id="table" width="900" height="520"></canvas>
+  <canvas id="table" width="1000" height="580"></canvas>
 <script>
 const canvas = document.getElementById('table');
 const ctx = canvas.getContext('2d');
-const table = { x: 50, y: 60, w: 800, h: 400, pocketRadius: 34, rail: 12 };
+const table = { x: 60, y: 70, w: 880, h: 460, pocketRadius: 34, rail: 12 };
 const pockets = [
   { x: table.x + table.rail, y: table.y + table.rail },
   { x: table.x + table.w - table.rail, y: table.y + table.rail },
@@ -73,6 +73,9 @@ const railRestitution = 0.88;
 const ballRestitution = 0.98;
 const minSpeed = 0.02;
 const radius = 20;
+const maxShotPower = 60;
+const shotPowerScale = 0.6;
+const shotVelocityFactor = 0.14;
 const pandaImage = new Image();
 // Embedded panda SVG image so no external file is required
 pandaImage.src = 'data:image/svg+xml;utf8,' +
@@ -388,19 +391,25 @@ function updateBalls() {
         } else if (!player1Type && ball.type === 'stripe') {
           player1Type = 'stripe';
           player2Type = 'solid';
-        } else if (ball.type === 'black') {
-          const playerType = getPlayerBallType(currentPlayer);
-          const remaining = playerType ? balls.filter(b => b.type === playerType && !b.inPocket).length : 1;
-          if (playerType && remaining === 0) {
+        }
+
+        // Check if current player has pocketed all their assigned balls (7 balls)
+        const playerType = getPlayerBallType(currentPlayer);
+        if (playerType) {
+          const remaining = balls.filter(b => b.type === playerType && !b.inPocket).length;
+          if (remaining === 0) {
             gameWon = true;
             winnerMessage = 'Player ' + currentPlayer + ' Wins!';
-          } else {
-            gameWon = true;
-            winnerMessage = 'Player ' + (currentPlayer === 1 ? 2 : 1) + ' Wins!';
           }
         }
+
+        // If the black ball is pocketed, determine win/lose based on whether player had cleared their balls
+        if (ball.type === 'black' && !gameWon) {
+          // black pocketed prematurely: opponent wins
+          gameWon = true;
+          winnerMessage = 'Player ' + (currentPlayer === 1 ? 2 : 1) + ' Wins!';
+        }
       }
-      return;
     }
     const minX = table.x + table.rail + ball.r;
     const maxX = table.x + table.w - table.rail - ball.r;
@@ -513,7 +522,7 @@ function drawPowerBar() {
   ctx.fillRect(x - 4, y - 4, barWidth + 8, barHeight + 28);
   ctx.fillStyle = '#244b1d';
   ctx.fillRect(x, y, barWidth, barHeight);
-  const fill = Math.min(1, shot.power / 45);
+  const fill = Math.min(1, shot.power / maxShotPower);
   ctx.fillStyle = '#d6f4aa';
   ctx.fillRect(x, y, barWidth * fill, barHeight);
   ctx.strokeStyle = '#94b790';
@@ -522,7 +531,8 @@ function drawPowerBar() {
   ctx.fillStyle = '#f1f0df';
   ctx.font = '14px "Segoe UI", Arial, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Power: ${Math.round(shot.power)}`, canvas.width / 2, y + barHeight + 20);
+  const powerPercent = Math.round((shot.power / maxShotPower) * 100);
+  ctx.fillText(`Power: ${powerPercent}%`, canvas.width / 2, y + barHeight + 20);
   ctx.restore();
 }
 
@@ -561,7 +571,7 @@ canvas.addEventListener('mousedown', (event) => {
   shot.targetY = y;
   const dx = cue.x - shot.targetX;
   const dy = cue.y - shot.targetY;
-  shot.power = Math.min(45, Math.hypot(dx, dy));
+  shot.power = Math.min(maxShotPower, Math.hypot(dx, dy) * shotPowerScale);
 });
 
 canvas.addEventListener('mousemove', (event) => {
@@ -573,7 +583,7 @@ canvas.addEventListener('mousemove', (event) => {
   shot.targetY = event.clientY - rect.top;
   const dx = cue.x - shot.targetX;
   const dy = cue.y - shot.targetY;
-  shot.power = Math.min(45, Math.hypot(dx, dy));
+  shot.power = Math.min(maxShotPower, Math.hypot(dx, dy) * shotPowerScale);
 });
 
 canvas.addEventListener('mouseup', (event) => {
@@ -585,9 +595,11 @@ canvas.addEventListener('mouseup', (event) => {
   const endY = event.clientY - rect.top;
   const dx = cue.x - endX;
   const dy = cue.y - endY;
-  shot.power = Math.min(45, Math.hypot(dx, dy));
-  cue.vx = dx * 0.16;
-  cue.vy = dy * 0.16;
+  const rawPull = Math.hypot(dx, dy);
+  shot.power = Math.min(maxShotPower, rawPull * shotPowerScale);
+  const powerRatio = rawPull ? shot.power / rawPull : 0;
+  cue.vx = dx * shotVelocityFactor * powerRatio;
+  cue.vy = dy * shotVelocityFactor * powerRatio;
   shotStarted = true;
   shotPlayer = currentPlayer;
   shotHitBall = false;
