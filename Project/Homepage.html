@@ -253,7 +253,9 @@
         </div>
       </div>
       <div class="hero-card">
-        <img src="images/Cute.jpeg" alt="Zoo animals in a playful setting" />
+        <a href="http://youtube.com/watch?v=IepV1UYi4qE">
+    <img src="images/Cute.jpeg" alt="">
+</a>
       </div>
     </section>
 
@@ -333,10 +335,66 @@
       <h2 class="section-title">Why Players Love It</h2>
       <p>Wings, Scales, & Tails is packed with fun easy to learn games along with information about animals!.</p>
     </section>
+
+    <section id="reviews">
+      <h2 class="section-title">Player Reviews</h2>
+      <div class="review-list">
+        <article class="review-card">
+          <h3>Sam, 12</h3>
+          <p>“I love how the games teach me about animals while I play. The Cheetah game is my favorite!”</p>
+        </article>
+        <article class="review-card">
+          <h3>Joshua, 11</h3>
+          <p>“The graphics are cool and the info pages are super helpful. I can learn and have fun at the same time.”</p>
+        </article>
+        <article class="review-card">
+          <h3>Billy, 13</h3>
+          <p>“Easy to play, colorful, and full of animal facts. This is the best animal game hub for school projects.”</p>
+        </article>
+      </div>
+      <div class="comment-section">
+        <h3>Leave Your Own Comment</h3>
+        <form class="comment-form" id="comment-form">
+          <div class="form-group">
+            <label for="player-name">Your Name:</label>
+            <input type="text" id="player-name" name="player-name" required />
+          </div>
+          <div class="form-group">
+            <label for="player-age">Age:</label>
+            <input type="number" id="player-age" name="player-age" min="1" max="120" />
+          </div>
+          <div class="form-group">
+            <label for="player-comment">Your Comment:</label>
+            <textarea id="player-comment" name="player-comment" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn" style="background: var(--green); color: white;">Submit Comment</button>
+        </form>
+        <div id="submitted-comments" style="margin-top: 2rem;"></div>
+      </div>    </section>
   </main>
 
   <footer id="contact">
     <div class="container">© Wings, Scales, & Tails — The wildest place to play.</div>
   </footer>
+
+  <script>
+    document.getElementById('comment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('player-name').value;
+      const age = document.getElementById('player-age').value;
+      const comment = document.getElementById('player-comment').value;
+      
+      const commentsContainer = document.getElementById('submitted-comments');
+      
+      const commentElement = document.createElement('article');
+      commentElement.className = 'review-card';
+      commentElement.innerHTML = '<h3>' + name + (age ? ', ' + age : '') + '</h3><p>"' + comment + '"</p>';
+      
+      commentsContainer.appendChild(commentElement);
+      
+      document.getElementById('comment-form').reset();
+    });
+  </script>
 </body>
 </html>
