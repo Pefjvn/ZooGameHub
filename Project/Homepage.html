@@ -181,6 +181,32 @@
       font-weight: 700;
     }
 
+    .chatbot-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-size: 1.8rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .chatbot-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
     footer {
       text-align: center;
       padding: 2rem 0 2.6rem;
@@ -200,6 +226,8 @@
   </style>
 </head>
 <body>
+  <a href="chatbot.html" class="chatbot-btn" title="Chat with our Zoo Assistant">💬</a>
+
   <header>
     <div class="container">
       <nav>
@@ -208,7 +236,7 @@
           <a href="openingpage.html">Opening Page</a>
           <a href="#games">Games</a>
           <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="Donation.html">Donation</a>
         </div>
       </nav>
     </div>
