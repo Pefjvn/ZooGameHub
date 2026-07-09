@@ -174,8 +174,19 @@
             'parrot':'Parrots are highly intelligent, vibrant birds belonging to the order Psittaciformes. They are primarily distinguished by two physical traits: a strong, curved bill used for cracking and crushing, and zygodactyl feet (two toes pointing forward, two backward) that allow them to climb and grasp food with dexterity.',
             'panda':'A panda—specifically the giant panda—is a large bear species native to the misty, mountainous forests of central China. Famous for its distinctive black-and-white coat and primarily bamboo-based diet, the giant panda is recognized as a global symbol of wildlife conservation.',
             'cheetah':'The cheetah is a unique and highly specialized wildcat (family Felidae) native to Africa and parts of Iran. Renowned as the fastest land animal on Earth, it can accelerate from 0 to 60 mph in just three seconds and reach peak speeds between 58 and 70 mph.',
-
+            'shrimp':'Shrimp are small, ten-legged aquatic crustaceans found in oceans and freshwater habitats worldwide. Known for their curved bodies, elongated tails, and whiplike antennae, they are highly valued as a global seafood delicacy due to their mild, sweet flavor and versatility in cooking.',
+            'falcon':'A falcon is a diurnal bird of prey belonging to the genus Falco and the family Falconidae. They are renowned for their swift, agile flight, sharply pointed wings, and notched, curved beaks used for hunting.',
+            'hippo':'A hippo (short for hippopotamus) is a massive, semi-aquatic herbivorous mammal native to sub-Saharan Africa. Known for their barrel-shaped bodies and huge mouths, they are the third-largest land mammals on Earth, recognized as the "horse of the river" in ancient Greek.',
+            'dog':'A dog (scientifically known as Canis lupus familiaris) is a domesticated carnivorous mammal belonging to the canine family. As humanitys first domesticated animal, it was selectively bred from an extinct wolf ancestor thousands of years ago and has evolved into hundreds of diverse breeds.',
+            'cat':'The domestic cat (Felis catus) is a small, domesticated carnivorous mammal. As the only domesticated species in the family Felidae, it is prized for its companionship and ability to hunt small pests. Cats are characterized by flexible bodies, quick reflexes, sharp retractable claws, and keen senses adapted for killing small prey.',
+            'wolf':'A wolf is a highly adaptable, carnivorous mammal belonging to the canine (dog) family. As the largest wild members of the dog family, they are renowned apex predators built for long-distance travel.',
+            'dolphin':'Dolphins are highly intelligent, warm-blooded marine mammals belonging to the cetacean family, which also includes whales and porpoises. There are over 40 species of dolphins found in oceans and some freshwater rivers globally. Because they breathe air, they must regularly surface to breathe through a blowhole.',
+            'red panda':'A red panda (Ailurus fulgens) is a small, tree-dwelling mammal native to the eastern Himalayas and southwestern China. Weighing about 10 to 14 pounds, it features dense reddish-brown fur, a long ringed tail, and a primarily bamboo diet. Despite their name, they are not closely related to giant pandas and belong to their own unique taxonomic family.',
+            'komodo dragon':'The Komodo dragon (Varanus komodoensis) is the largest and heaviest living species of lizard on Earth, native to a few Indonesian islands like Komodo and Flores. As an apex predator, it can grow up to 10 feet long and weigh over 300 pounds, using venomous bites, sharp teeth, and a keen sense of smell to hunt.',
+            'goldfish':'A goldfish (Carassius auratus) is a small, freshwater fish in the carp and minnow family. Originally domesticated in ancient China nearly 2,000 years ago from the Prussian carp, it remains one of the most popular and iconic aquarium and pond pets in the world.',
+            'sugar glider':'A sugar glider (Petaurus breviceps) is a small, nocturnal, tree-dwelling marsupial native to Australia, Indonesia, and Papua New Guinea. Famous for their oversized eyes and ability to glide up to 150 feet (45 meters) using a skin membrane called a patagium, they are named for their strong appetite for sweet foods like nectar and sap.',
         };
+
 
         function sendMessage() {
             const userInput = document.getElementById('userInput');
@@ -214,7 +225,7 @@
             }
 
             if (message.includes('help') || message.includes('?')) {
-                return 'I can answer questions about: hi, lion, cheetah, turtle, crane, parrot, elephant, zebra, monkey, penguin, giraffe, bear, snake, peacock, and tiger. What would you like to know?';
+                return 'I can answer questions about: hi, lion, elephant. zebra, monkey, penguin, giraffe, bear, snake, peacock, tiger, crane, turtle, parrot, panda, cheetah, shrimp, falcon, hippo, dog, cat, wolf, dolphin, red panda, komodo dragon, goldfish, sugar glider. What would you like to know?';
             }
 
             return 'I don\'t have information about that. Try asking me about: lion, elephant, zebra, monkey, penguin, giraffe, bear, snake, peacock, or tiger!';
