@@ -158,6 +158,7 @@
 
     <script>
         const animalKnowledge = {
+            'hi':'Hi! what animal do you want to learn about today?',
             'lion': 'The lion is known as the king of the jungle. Lions are large carnivores that live in groups called prides. They are found in Africa and a small population in India.',
             'elephant': 'Elephants are the largest land animals. They are highly intelligent, emotional, and social creatures. They can live up to 70 years in the wild.',
             'zebra': 'Zebras are striped herbivores native to Africa. Their stripes are unique to each individual, like human fingerprints. They live in herds for protection.',
@@ -213,7 +214,7 @@
             }
 
             if (message.includes('help') || message.includes('?')) {
-                return 'I can answer questions about: lion, cheetah, turtle, crane, parrot, elephant, zebra, monkey, penguin, giraffe, bear, snake, peacock, and tiger. What would you like to know?';
+                return 'I can answer questions about: hi, lion, cheetah, turtle, crane, parrot, elephant, zebra, monkey, penguin, giraffe, bear, snake, peacock, and tiger. What would you like to know?';
             }
 
             return 'I don\'t have information about that. Try asking me about: lion, elephant, zebra, monkey, penguin, giraffe, bear, snake, peacock, or tiger!';
