@@ -118,7 +118,7 @@ startBtn.addEventListener("click", () => {
   started = true;
 });
 returnBtn.addEventListener("click", () => {
-  window.location.href = "homepage.php";
+  window.location.href = "homepage.html";
 });
 function drawPenguin() {
   ctx.save();
