@@ -138,7 +138,7 @@
     </style>
 </head>
 <body>
-    <a href="homepage.html" class="back-button">← Back</a>
+    <a href="homepage.php" class="back-button">← Back</a>
     <div class="container">
         <div class="header">
             <h1> Zoo Chatbot </h1>

@@ -226,7 +226,7 @@
   </style>
 </head>
 <body>
-  <a href="chatbot.html" class="chatbot-btn" title="Chat with our Zoo Assistant">💬</a>
+  <a href="chatbot.php" class="chatbot-btn" title="Chat with our Zoo Assistant">💬</a>
 
   <header>
     <div class="container">
@@ -236,7 +236,7 @@
           <a href="index.php">Opening Page</a>
           <a href="#games">Games</a>
           <a href="#about">About</a>
-          <a href="Donation.html">Donation</a>
+          <a href="Donation.php">Donation</a>
         </div>
       </nav>
     </div>
@@ -268,8 +268,8 @@
             <h3>Panda</h3>
             <p>- Use the pandaball to knock the others into the holes!</p>
             <p>- Learn about pandas and their history!</p>
-            <a href="PandaBlizzard.html" class="play-btn">Play Game</a>
-            <a href="pandainfo.html" class="play-btn">Info</a>
+            <a href="PandaBlizzard.php" class="play-btn">Play Game</a>
+            <a href="pandainfo.php" class="play-btn">Info</a>
           </div>
         </article>
 
@@ -279,8 +279,8 @@
             <h3>Parrot</h3>
             <p>- Help The Parrot Fly Away From The Hunters!</p>
             <p>- Learn about parrots and their habitats!</p>
-            <a href="RUNFROMCHEETAH.html" class="play-btn">Play Game</a>
-            <a href="cheetahinfo.html" class="play-btn">Info</a>
+            <a href="RUNFROMCHEETAH.php" class="play-btn">Play Game</a>
+            <a href="cheetahinfo.php" class="play-btn">Info</a>
           </div>
         </article>
 
@@ -290,8 +290,8 @@
             <h3>Turtle</h3>
             <p>- Scrub for the turtle and help it return home!</p>
             <p>- Learn more about turtles and their oceans!</p>
-            <a href="CurlingTurtle.html" class="play-btn">Play Game</a>
-            <a href="turtleinfo.html" class="play-btn">Info</a>
+            <a href="CurlingTurtle.php" class="play-btn">Play Game</a>
+            <a href="turtleinfo.php" class="play-btn">Info</a>
           </div>
         </article>
         
@@ -301,8 +301,8 @@
             <h3>Cheetah</h3>
             <p>- Play with your friend and try to beat them in ultimate! </p>
             <p>- Learn more about Cheetah's and their similar counterpart! </p>
-            <a href="CheetahGame.html" class="play-btn">Play Game</a>
-            <a href="ParrotInfo.html" class="play-btn">Info</a>
+            <a href="CheetahGame.php" class="play-btn">Play Game</a>
+            <a href="ParrotInfo.php" class="play-btn">Info</a>
           </div>
         </article>
 
@@ -312,8 +312,8 @@
             <h3>Crane</h3>
             <p>- Collect the red to increase the length of your neck </p>
             <p>- Learn more about cranes and their diet </p>
-            <a href="CraneGame.html" class="play-btn">Play Game</a>
-            <a href="CraneInfo.html" class="play-btn">Info</a>
+            <a href="CraneGame.php" class="play-btn">Play Game</a>
+            <a href="CraneInfo.php" class="play-btn">Info</a>
           </div>
         </article>
 
@@ -323,8 +323,8 @@
             <h3>Penguin</h3>
             <p>- Try to get as high as you can without hitting the spikes </p>
             <p>- Learn more about penguins and climate change </p>
-            <a href="PenguinGame.html" class="play-btn">Play Game</a>
-            <a href="PenguinInfo.html" class="play-btn">Info</a>
+            <a href="PenguinGame.php" class="play-btn">Play Game</a>
+            <a href="PenguinInfo.php" class="play-btn">Info</a>
           </div>
         </article>
 

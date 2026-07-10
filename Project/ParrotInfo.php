@@ -59,7 +59,7 @@
 </head>
 <body class="cheetah-overlay">
         <div class="container" style="padding: 1rem 0;">
-            <a href="homepage.html" style="color: #19140e; text-decoration: none; background: #4e4132; padding: 0.75rem 1.25rem; border-radius: 9999px; display: inline-block; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);">Return to homepage</a>
+            <a href="homepage.php" style="color: #19140e; text-decoration: none; background: #4e4132; padding: 0.75rem 1.25rem; border-radius: 9999px; display: inline-block; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);">Return to homepage</a>
         </div>
         <div class="max-lg:order-2 lg:col-start-1 lg:col-span-4 lg:row-start-2 lg:row-span-3 lg:flex lg:items-start" data-animated>
         <div class="animated-fade-in-up">

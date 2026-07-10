@@ -116,7 +116,7 @@
     </style>
 </head>
 <body>
-    <a href="homepage.html" class="back-button">← Back</a>
+    <a href="homepage.php" class="back-button">← Back</a>
     <section class="hero">
         <h1>Support Our Zoo</h1>
         <p>Help care for the animals, protect habitats, and support educational programs. Choose a donation amount below or enter your own contribution.</p>

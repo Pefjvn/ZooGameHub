@@ -51,7 +51,7 @@
         <canvas id="game" width="480" height="640"></canvas>
         <div class="overlay" id="score">Score: 0</div>
         <button id="startBtn" class="start-button">Start Game</button>
-        <a href="Homepage.html" class="return-button">Return to Home</a>
+        <a href="Homepage.php" class="return-button">Return to Home</a>
     </div>
 
     <script>

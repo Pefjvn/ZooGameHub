@@ -68,7 +68,7 @@
 </head>
 <body>
     <div class="popup">
-        <a class="top-button" href="homepage.html" title="Close">X</a>
+        <a class="top-button" href="homepage.php" title="Close">X</a>
         <img src="images/Panda.jpg" alt="Panda">
     </div>
 </body>

@@ -142,7 +142,7 @@
   </style>
 </head>
 <body>
-  <a href="homepage.html" class="back-button">← Back</a>
+  <a href="homepage.php" class="back-button">← Back</a>
   <h1>Ultimate Tic Tac Toe</h1>
   <div class="instructions">
     <p>Leopards are X and Cheetahs are O. Each move sends your opponent to the matching small board. Win three small boards in a row to win the big board.</p>

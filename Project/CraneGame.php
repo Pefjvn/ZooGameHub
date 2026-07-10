@@ -164,7 +164,7 @@
 	startBtn.addEventListener('click', ()=>{
 		if(!running){ running=true; reset(); requestAnimationFrame(step); }
 	});
-	homeBtn.addEventListener('click', ()=>{ location.href = 'homepage.html'; });
+	homeBtn.addEventListener('click', ()=>{ location.href = 'homepage.php'; });
 
 	// start control loop and initial draw
 	controlLoop(); draw();

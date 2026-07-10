@@ -611,7 +611,7 @@ canvas.addEventListener('mouseleave', () => { shot.active = false; });
 
 document.getElementById('reset-btn').addEventListener('click', resetGame);
 document.getElementById('home-btn').addEventListener('click', () => {
-  window.location.href = 'homepage.html';
+  window.location.href = 'homepage.php';
 });
 
 init();
